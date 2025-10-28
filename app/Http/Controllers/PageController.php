@@ -56,9 +56,32 @@ class PageController extends Controller
             'change_description' => 'nullable|string',
         ]);
 
-        $this->pageService->updatePage($page, $validated);
+        try {
+            $this->pageService->updatePage($page, $validated);
 
-        return back()->with('success', 'Page published successfully!');
+            // For AJAX/JSON requests
+            if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Changes saved successfully!',
+                    'page' => $page->fresh()
+                ], 200);
+            }
+
+            // For regular form submissions
+            return back()->with('success', 'Page updated successfully!');
+        } catch (\Exception $e) {
+            Log::error('Page update failed: ' . $e->getMessage());
+
+            if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update page: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()->with('error', 'Failed to update page: ' . $e->getMessage());
+        }
     }
 
     public function unpublish(Page $page)
