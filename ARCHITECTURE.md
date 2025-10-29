@@ -25,7 +25,7 @@ This is a monolithic Laravel application that provides a simple CMS for client u
 
 ### Authentication and authorization
 - Guard: `web` session auth (`config/auth.php`).
-- Roles are stored on `users.role` (not from the Spatie tables by default in code paths).
+- Roles are stored on `users.role`.
 - Authorization via `Gate::authorize` and `PagePolicy` for per-page access control.
 
 ### Data flow and interactions
@@ -54,6 +54,5 @@ This is a monolithic Laravel application that provides a simple CMS for client u
 ### Extensibility
 - Add more Themes and expose customization fields within `Page.content`.
 - Offload analytics tracking or exports to queued jobs if needed.
-- Integrate the Spatie roles/permissions tables if fine-grained roles are required.
 
 

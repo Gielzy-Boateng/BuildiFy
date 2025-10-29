@@ -7,7 +7,7 @@ Lightweight Laravel-based CMS for single-page sites with themes, publishing, and
 - Laravel 12 (PHP ^8.2)
 - Blade views, Vite, Tailwind
 - SQLite (default) or any Laravel-supported DB
-- spatie/laravel-permission, maatwebsite/excel, intervention/image
+- maatwebsite/excel, intervention/image
 
 ### Installation
 1) Prerequisites
