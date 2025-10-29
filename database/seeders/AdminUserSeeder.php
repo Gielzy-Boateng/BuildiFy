@@ -10,13 +10,15 @@ class AdminUserSeeder extends Seeder
 {
     public function run()
     {
-        User::updateOrCreate([
-            'name' => 'Admin User',
-            'email' => 'admin@cms.com',
-            'password' => Hash::make('password'),
-            'slug' => 'admin',
-            'role' => 'admin',
-            'is_active' => true,
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@cms.com'], // FIRST array: what to match by
+            [ // SECOND array: what to create/update
+                'name' => 'Admin User',
+                'password' => Hash::make('password'),
+                'slug' => 'admin',
+                'role' => 'admin',
+                'is_active' => true,
+            ]
+        );
     }
 }
