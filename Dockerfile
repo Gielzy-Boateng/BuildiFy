@@ -43,3 +43,14 @@ EXPOSE 8000
 
 # Start server
 CMD php artisan serve --host=0.0.0.0 --port=8000
+
+
+CMD php artisan migrate --force && tail -f storage/logs/laravel.log & php artisan serve --host=0.0.0.0 --port=8000
+```
+
+**OR** temporarily set `APP_DEBUG=true` in Railway Variables to see the actual error on the page.
+
+But the fastest way - add this to your Railway **Variables**:
+```
+APP_DEBUG=true
+LOG_LEVEL=debug
