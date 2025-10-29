@@ -1,6 +1,6 @@
 FROM php:8.3-fpm
 
-# Install system dependencies
+# Install system dependencies & Nginx
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -13,7 +13,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nodejs \
-    npm
+    npm \
+    nginx \
+    supervisor
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -22,16 +24,15 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
 WORKDIR /var/www
 
-# Copy all files
+# Copy application
 COPY . .
 
-# Install PHP dependencies
+# Install dependencies
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
-# Install and build Vite assets
+# Build assets
 RUN npm install && npm run build
 
 # Set permissions
@@ -41,8 +42,27 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chmod -R 775 storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-# Expose port
+# Create storage link
+RUN php artisan storage:link
+
+# Nginx config
+RUN echo 'server { \n\
+    listen 8000; \n\
+    root /var/www/public; \n\
+    index index.php; \n\
+    location / { \n\
+        try_files $uri $uri/ /index.php?$query_string; \n\
+    } \n\
+    location ~ \.php$ { \n\
+        fastcgi_pass 127.0.0.1:9000; \n\
+        fastcgi_index index.php; \n\
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; \n\
+        include fastcgi_params; \n\
+    } \n\
+}' > /etc/nginx/sites-available/default
+
 EXPOSE 8000
 
-# Start server with migrations and seeders
-CMD php artisan migrate --force --seed && php artisan serve --host=0.0.0.0 --port=8000
+CMD php artisan migrate --force && \
+    php-fpm -D && \
+    nginx -g 'daemon off;'
