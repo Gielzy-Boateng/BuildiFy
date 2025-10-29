@@ -10,6 +10,5 @@ nixPkgs = [
   'php83Extensions.bcmath'
 ]
 
-
 [phases.install]
-cmds = ['composer install --optimize-autoloader --no-scripts --no-interaction']
+cmds = ['composer install --optimize-autoloader --no-scripts --no-interaction --ignore-platform-req=ext-gd']
