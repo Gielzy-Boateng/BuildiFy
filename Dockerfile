@@ -32,25 +32,15 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # Copy application
 COPY . .
 
-# Generate optimizations
-RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
-
 # Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p storage/logs \
+    && mkdir -p bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
 
 # Expose port
 EXPOSE 8000
 
 # Start server
-CMD php artisan serve --host=0.0.0.0 --port=8000
-
-
-CMD php artisan migrate --force && tail -f storage/logs/laravel.log & php artisan serve --host=0.0.0.0 --port=8000
-```
-
-**OR** temporarily set `APP_DEBUG=true` in Railway Variables to see the actual error on the page.
-
-But the fastest way - add this to your Railway **Variables**:
-```
-APP_DEBUG=true
-LOG_LEVEL=debug
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
