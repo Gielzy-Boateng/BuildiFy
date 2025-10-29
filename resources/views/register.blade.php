@@ -84,7 +84,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-gray-100">
-    {{-- Toast Notifications (copy from app.blade.php) --}}
+    {{-- Toast Notifications --}}
     <div x-data="toastManager()" 
          @notify.window="addToast($event.detail)"
          class="fixed top-4 right-4 z-50 space-y-2">
