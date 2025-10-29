@@ -56,10 +56,37 @@ class ThemeSeeder extends Seeder
                 'text_color' => '#F9FAFB',
                 'accent_color' => '#9CA3AF',
             ],
+            [
+                'name' => 'Rose Gold',
+                'slug' => 'rose-gold',
+                'primary_color' => '#B76E79',
+                'secondary_color' => '#F1A7A7',
+                'background_color' => '#FFF5F7',
+                'text_color' => '#1F2937',
+                'accent_color' => '#FDB7C0',
+            ],
+            [
+                'name' => 'Slate Minimal',
+                'slug' => 'slate-minimal',
+                'primary_color' => '#334155',
+                'secondary_color' => '#64748B',
+                'background_color' => '#F8FAFC',
+                'text_color' => '#0F172A',
+                'accent_color' => '#94A3B8',
+            ],
+            [
+                'name' => 'Emerald Light',
+                'slug' => 'emerald-light',
+                'primary_color' => '#059669',
+                'secondary_color' => '#34D399',
+                'background_color' => '#ECFDF5',
+                'text_color' => '#064E3B',
+                'accent_color' => '#6EE7B7',
+            ],
         ];
 
         foreach ($themes as $theme) {
-            Theme::create($theme);
+            Theme::updateOrCreate(['slug' => $theme['slug']], $theme);
         }
     }
 }

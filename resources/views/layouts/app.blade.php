@@ -4,43 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'CMS Dashboard')</title>
+    <title>@yield('title', 'Buildify Dashboard')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('styles')
 </head>
-<body class="bg-gray-50">
+<body class="min-h-screen" style="background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);">
     @auth
-    <nav class="bg-white shadow-sm">
+    <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
-                        <a href="{{ route('dashboard') }}" class="text-xl font-bold text-gray-800">
-                            CMS Dashboard
+                        <a href="{{ route('dashboard') }}" class="text-xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent tracking-tight">
+                            Buildify Dashboard
                         </a>
                     </div>
-                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="{{ route('dashboard') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('dashboard') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300' }} text-sm font-medium">
+                    <div class="hidden sm:ml-8 sm:flex sm:space-x-6">
+                        <a href="{{ route('dashboard') }}" class="inline-flex items-center px-2 pt-1 border-b-2 {{ request()->routeIs('dashboard') ? 'border-indigo-600 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} text-sm font-medium transition-colors">
                             Dashboard
                         </a>
-                        <a href="{{ route('pages.edit', auth()->user()->page) }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('pages.*') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300' }} text-sm font-medium">
+                        <a href="{{ route('pages.edit', auth()->user()->page) }}" class="inline-flex items-center px-2 pt-1 border-b-2 {{ request()->routeIs('pages.*') ? 'border-indigo-600 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} text-sm font-medium transition-colors">
                             Edit Page
                         </a>
-                        <a href="{{ route('analytics.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('analytics.*') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300' }} text-sm font-medium">
+                        <a href="{{ route('analytics.index') }}" class="inline-flex items-center px-2 pt-1 border-b-2 {{ request()->routeIs('analytics.*') ? 'border-indigo-600 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} text-sm font-medium transition-colors">
                             Analytics
                         </a>
-                        <a href="{{ route('themes.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('themes.*') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300' }} text-sm font-medium">
+                        <a href="{{ route('themes.index') }}" class="inline-flex items-center px-2 pt-1 border-b-2 {{ request()->routeIs('themes.*') ? 'border-indigo-600 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} text-sm font-medium transition-colors">
                             Themes
                         </a>
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <span class="text-gray-700 mr-4">{{ auth()->user()->name }}</span>
+                    <span class="hidden sm:inline text-gray-700 mr-4">{{ auth()->user()->name }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="text-gray-500 hover:text-gray-700">
+                        <button type="submit" class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 transition">
                             Logout
                         </button>
                     </form>
@@ -52,21 +52,23 @@
 
     @if(session('success'))
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-        <div class="bg-green-50 border-l-4 border-green-400 p-4">
-            <p class="text-green-700">{{ session('success') }}</p>
+        <div class="flex items-start p-4 rounded-xl border border-green-200 bg-green-50/80 shadow-sm">
+            <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p class="text-green-800 text-sm font-medium">{{ session('success') }}</p>
         </div>
     </div>
     @endif
 
     @if(session('error'))
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-        <div class="bg-red-50 border-l-4 border-red-400 p-4">
-            <p class="text-red-700">{{ session('error') }}</p>
+        <div class="flex items-start p-4 rounded-xl border border-red-200 bg-red-50/80 shadow-sm">
+            <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p class="text-red-800 text-sm font-medium">{{ session('error') }}</p>
         </div>
     </div>
     @endif
 
-    <main class="py-10">
+    <main class="py-10 animate-[fadeIn_300ms_ease-out]">
         @yield('content')
     </main>
 
@@ -85,12 +87,12 @@
              x-transition:leave-start="opacity-100"
              x-transition:leave-end="opacity-0"
              :class="{
-                 'bg-green-50 border-green-200': toast.type === 'success',
-                 'bg-red-50 border-red-200': toast.type === 'error',
-                 'bg-blue-50 border-blue-200': toast.type === 'info',
-                 'bg-yellow-50 border-yellow-200': toast.type === 'warning'
+                 'bg-green-50/90 border-green-200': toast.type === 'success',
+                 'bg-red-50/90 border-red-200': toast.type === 'error',
+                 'bg-blue-50/90 border-blue-200': toast.type === 'info',
+                 'bg-yellow-50/90 border-yellow-200': toast.type === 'warning'
              }"
-             class="flex items-start p-4 rounded-lg shadow-lg border-l-4 max-w-md">
+             class="flex items-start p-4 rounded-xl shadow-lg border max-w-md backdrop-blur">
             
             {{-- Icon --}}
             <div class="flex-shrink-0 mr-3">
